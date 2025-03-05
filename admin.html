@@ -1,0 +1,150 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+        crossorigin="anonymous">
+        <title>Admin Panel - SmartQuiz</title>
+        <style>
+            body {
+                background: linear-gradient(135deg, #2c3e50, #3498db);
+                color: white;
+                font-family: 'Poppins', sans-serif;
+            }
+            .admin-container {
+                background-color: white;
+                color: #333;
+                padding: 30px;
+                margin: auto;
+                margin-top: 50px;
+                box-shadow: 0px 0px 10px black;
+                max-width: 600px;
+                border-radius: 10px;
+            }
+            .btn-dark:hover {
+                background-color: #555;
+                border-color: #555;
+            }
+            hr {
+            border-top: 2px solid #374d63;
+            margin: 20px 0;
+        }
+        </style>
+    </head>
+    <body>
+
+    <div class="container admin-container">
+        <h2 class="text-center">Admin Login</h2>
+        <form id="adminLoginForm">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Login</button>
+        </form>
+    </div>
+
+    <div class="container admin-container d-none" id="quizFormContainer">
+        <h2 class="text-center">Create Quiz</h2>
+        <form id="quizCreationForm">
+            <div id="questionsContainer"></div>
+            <button type="submit" class="btn btn-dark w-100 mt-3">Save Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (username === 'Admin' && password === 'Admin') {
+                document.querySelector('.admin-container').classList.add('d-none');
+                document.getElementById('quizFormContainer').classList.remove('d-none');
+                generateQuestionFields();
+            } else {
+                alert('Invalid credentials!');
+            }
+        });
+
+        function generateQuestionFields() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                container.innerHTML += `
+                    <div class="mb-3">
+                        <label><strong>Question ${i} :</strong></label>
+                         <input type="text" class="form-control" name="question${i}" required>
+                           <label><strong>Options:</strong></label> 
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="q${i}correct" value="option1" required>
+                            <input type="text" class="form-control d-inline w-75" name="q${i}option1" placeholder="Option 1" required>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="q${i}correct" value="option2" required>
+                            <input type="text" class="form-control d-inline w-75" name="q${i}option2" placeholder="Option 2" required>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="q${i}correct" value="option3" required>
+                            <input type="text" class="form-control d-inline w-75" name="q${i}option3" placeholder="Option 3" required>
+                        </div>
+                    </div>
+                    <hr>
+                `;
+            }
+        }
+
+        document.getElementById('quizCreationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        let quizData = {};
+
+        for (let i = 1; i <= 10; i++) {
+            const questionField = document.querySelector(`[name=question${i}]`);
+            const correctAnswer = document.querySelector(`[name=q${i}correct]:checked`);
+
+            if (!questionField.value.trim()) {
+                alert(`Please enter a question for Question ${i}`);
+                return;
+            }
+
+            if (!correctAnswer) {
+                alert(`Please select a correct answer for Question ${i}`);
+                return;
+            }
+
+            const options = [
+                document.querySelector(`[name=q${i}option1]`).value.trim(),
+                document.querySelector(`[name=q${i}option2]`).value.trim(),
+                document.querySelector(`[name=q${i}option3]`).value.trim()
+            ];
+
+            // Find correct option text
+            const correctOptionIndex = correctAnswer.value === "option1" ? 0 :
+                                    correctAnswer.value === "option2" ? 1 : 2;
+            const correctOptionText = options[correctOptionIndex];
+
+            // Save question, options, and correct answer
+            quizData[`question${i}`] = {
+                question: questionField.value.trim(),
+                options: options,
+                correct: correctOptionText
+            };
+        }
+
+        // Store quiz data in localStorage
+        localStorage.setItem('quizData', JSON.stringify(quizData));
+
+        alert('Quiz saved successfully!');
+    });
+
+    </script>
+
+    </body>
+    </html>

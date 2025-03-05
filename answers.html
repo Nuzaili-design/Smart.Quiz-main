@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+          crossorigin="anonymous">
+    <title>Quiz Answers</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .answers-container {
+            background-color: rgb(255, 255, 255);
+            color: #333;
+            padding: 30px;
+            margin: auto;
+            margin-top: 50px;
+            box-shadow: 0px 0px 10px rgb(0, 0, 0);
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .correct-answer {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .btn-back {
+            margin-top: 20px;
+        }
+
+        .btn-dark:hover {
+            background-color: #555;
+            border-color: #555;
+        }
+
+        hr {
+            border-top: 2px solid #2c3e50;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container answers-container">
+    <h2 class="text-center">Correct Answers</h2>
+    <div id="answersList"></div>
+
+    <div class="text-center">
+        <a href="index.html" class="btn btn-dark btn-back">Back to Quiz</a>
+    </div>
+</div>
+
+<script>
+    // Retrieve quiz data from localStorage
+    const quizData = JSON.parse(localStorage.getItem('quizData'));
+
+    if (!quizData) {
+        alert("No quiz data found! Redirecting to quiz...");
+        window.location.href = "index.html"; // Redirect if no data
+    } else {
+        const answersContainer = document.getElementById("answersList");
+        let answersHTML = "";
+
+        // Loop through and display correct answers
+        for (let i = 1; i <= 10; i++) {
+            const question = quizData[`question${i}`].question;
+            const correctAnswer = quizData[`question${i}`].correct;
+
+            answersHTML += `
+                <div class="correct-answer">
+                    <strong>Question ${i}:</strong> ${question} <br>
+                    <span class="text-success">Answer: ${correctAnswer}</span>
+                </div>
+                <hr>
+            `;
+        }
+
+        answersContainer.innerHTML = answersHTML;
+    }
+</script>
+
+</body>
+</html>
+
+
