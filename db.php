@@ -1,9 +1,9 @@
 <?php
 // Database connection file (db.php)
-$localhost = 'localhost';
-$username = 'root1';
-$password = '';
-$database = 'smartquiz';
+$localhost = 'sql211.infinityfree.com';
+$username = 'if0_38461346';
+$password = '3yHhBuojQmPsWy';
+$database = 'if0_38461346_smartquiz';
 
 $conn = new mysqli($localhost, $username, $password, $database);
 
