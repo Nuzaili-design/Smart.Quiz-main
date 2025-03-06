@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
         $optionA = $_POST["q${i}option1"];
         $optionB = $_POST["q${i}option2"];
         $optionC = $_POST["q${i}option3"];
-        $optionD = $_POST["q${i}option4"]; // Added Option D
+        $optionD = $_POST["q${i}option4"]; 
         $correct = $_POST["q${i}correct"];
         
         $stmt = $conn->prepare("INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_option) 
@@ -40,9 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
         $stmt->close();
     }
 
-    // Redirect to the start.php to show the newly created quiz
-    echo "<script>window.location.href = 'start.php';</script>";
-    exit;
+    // Set session for SweetAlert message
+    $_SESSION['quiz_success'] = true;
 }
 ?>
 
@@ -52,6 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <title>Admin Panel - SmartQuiz</title>
     <style>
         body {
@@ -73,7 +75,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
 </head>
 <body>
 
-<div class="container admin-container">
+<!-- SweetAlert2 for Quiz Success -->
+<?php if (isset($_SESSION['quiz_success'])): ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Quiz Saved Successfully!',
+            text: 'Redirecting to homepage...',
+            timer: 3000, // 3 seconds delay before redirect
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = 'index.html'; // Redirect to homepage
+        });
+    </script>
+    <?php unset($_SESSION['quiz_success']); // Unset session variable after alert ?>
+<?php endif; ?>
+
+<div class="container admin-container animate__animated animate__fadeInDown">
     <?php if (!isset($_SESSION['admin'])): ?>
         <h2 class="text-center">Admin Login</h2>
         <form method="POST">

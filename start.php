@@ -82,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Start Quiz</title>
     <style>
         body { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; font-family: 'Poppins', sans-serif; }
@@ -158,19 +159,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <script>
     let timeLeft = 240; // 4 minutes in seconds
+
     function updateTimer() {
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
         document.getElementById('timer').textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         timeLeft--;
+        
         if (timeLeft < 0) {
             clearInterval(timerInterval);
-            alert("Time's up! Submitting quiz...");
-            document.getElementById('quizForm').submit();
+            
+            // Use SweetAlert2 to show the updated message
+            Swal.fire({
+                icon: 'warning',
+                title: "Time's up!",
+                text: 'Your quiz is automatically submitted.',
+                showConfirmButton: false,
+                timer: 3000, // Alert will show for 2 seconds
+                willClose: () => {
+                    document.getElementById('quizForm').submit(); // Submit the form after the alert closes
+                }
+            });
         }
     }
+
     const timerInterval = setInterval(updateTimer, 1000);
 </script>
-
 </body>
 </html>
