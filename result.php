@@ -96,7 +96,7 @@ if ($userId > 0) {
 
 <div class="container">
     <h2>Thank You for Taking the Quiz!</h2>
-    <p>Your score is: <span id="scoreDisplay"><?php echo $score; ?> / 10</span></p>
+    <p>Your score is: <span id="scoreDisplay"><?php echo $score; ?> / 5</span></p>
     <p>Goodbye, and get ready for the next quiz!</p>
 
     <div class="progress-container">
