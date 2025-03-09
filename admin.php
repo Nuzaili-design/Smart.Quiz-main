@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
     $stmt->close();
 
     // Insert each question for the quiz
-    for ($i = 1; $i <= 10; $i++) {
+    for ($i = 1; $i <= 5; $i++) {
         $question = $_POST["question$i"];
         $optionA = $_POST["q${i}option1"];
         $optionB = $_POST["q${i}option2"];
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_quiz'])) {
                 <input type="text" class="form-control" name="quiz_title" required>
             </div>
             <div id="questionsContainer">
-                <?php for ($i = 1; $i <= 10; $i++): ?>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
                     <div class="mb-3">
                         <label><strong>Question <?= $i ?> :</strong></label>
                         <input type="text" class="form-control" name="question<?= $i ?>" required>
